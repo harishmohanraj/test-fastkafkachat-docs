@@ -1,0 +1,7 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - API_Web_Service.ipynb
+      - Auth.ipynb
+      - Chat_Generator.ipynb

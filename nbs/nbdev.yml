@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "captnchat"
+  site-url: "https://airtai.github.io/captnchat"
+  description: "captnchat"
+  repo-branch: main
+  repo-url: "https://github.com/airtai/captnchat"
