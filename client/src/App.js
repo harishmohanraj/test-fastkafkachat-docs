@@ -51,9 +51,6 @@ function App() {
       // console.log(`baseUrl = ${baseUrl}`);
 
       const serverChatLog = chatLogNew.map(({role, content}) => ({role, content}));
-      console.log("this is what i am sendin to server")
-      console.log(serverChatLog)
-      console.log(serverChatLog.at(-1)["content"])
       const response = await fetch(baseUrl, {
         method: "POST",
         headers: {

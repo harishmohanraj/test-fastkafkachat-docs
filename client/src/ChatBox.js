@@ -14,7 +14,7 @@ const ChatBox = ({chatLog, setChatInput, handleSubmit, chatInput}) =>
           rows="1"
           value={chatInput}
           onChange={(e)=> setChatInput(e.target.value)}
-          placeholder={"Type your message here!"}
+          placeholder={"Type your questions here!"}
           className="chat-input-textarea" ></input>
           <button className="submit" type="submit">Submit</button>
           </form>
