@@ -13,7 +13,7 @@ function App() {
     {
       role: "assistant",
       content:
-        "Hi, I'm Capt'n AI, a chat bot that specializes in optimizing Google Ads campaigns. How can I help you today?"
+        "Hi, I'm Fastkafka AI. How can I help you today?"
     },
   ]);
 
@@ -23,7 +23,7 @@ function App() {
       {
         role: "assistant",
         content:
-          "Hi, I'm Capt'n AI, a chat bot that specializes in optimizing Google Ads campaigns. How can I help you today?"
+        "Hi, I'm Fastkafka AI. How can I help you today?"
       },
     ]);
   }
@@ -51,19 +51,23 @@ function App() {
       // console.log(`baseUrl = ${baseUrl}`);
 
       const serverChatLog = chatLogNew.map(({role, content}) => ({role, content}));
+      console.log("this is what i am sendin to server")
+      console.log(serverChatLog)
+      console.log(serverChatLog.at(-1)["content"])
       const response = await fetch(baseUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message_history: serverChatLog,
+          // message_history: serverChatLog,
+          user_query: serverChatLog.at(-1)["content"]
         }),
       });
       const data = await response.json();
       setChatLog([
         ...chatLogNew,
-        { role: "assistant", content: `${data.message}`},
+        { role: "assistant", content: `${data}`},
       ]);
 
       setLoading(false);
