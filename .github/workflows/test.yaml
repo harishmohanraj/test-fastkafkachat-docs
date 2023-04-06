@@ -7,4 +7,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps: [uses: fastai/workflows/nbdev-ci@master]
+    steps:
+      - name: Install client
+        run: cd client && npm install && npm run build
+      - uses: fastai/workflows/nbdev-ci@master
