@@ -13,7 +13,7 @@ function App() {
     {
       role: "assistant",
       content:
-        "Hi, I'm Fastkafka AI. How can I help you today?"
+        "Hi, I'm FastKafka AI. How can I help you today?"
     },
   ]);
 
