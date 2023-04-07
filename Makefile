@@ -3,24 +3,24 @@ SRC = $(wildcard nbs/*.ipynb)
 .PHONY: all
 all: clean dist .install_pre_commit_hooks
 
-captnchat: $(SRC) settings.ini
+fastkafkachat: $(SRC) settings.ini
 	touch README.md
 	nbdev_export
-	touch captnchat
+	touch fastkafkachat
     
 .install_pre_commit_hooks:
 	pre-commit install
 	touch .install_pre_commit_hooks
 
-.PHONY: install_captnchat_client
-install_captnchat_client:
+.PHONY: install_fastkafkachat_client
+install_fastkafkachat_client:
 	cd client && npm install
 
-.PHONY: build_captnchat_client
-build_captnchat_client: install_captnchat_client
+.PHONY: build_fastkafkachat_client
+build_fastkafkachat_client: install_fastkafkachat_client
 	cd client && npm run build
 
-dist: captnchat build_captnchat_client
+dist: fastkafkachat build_fastkafkachat_client
 	python3 setup.py sdist bdist_wheel
 	pip install -e '.[dev]'
 	touch dist
@@ -28,8 +28,8 @@ dist: captnchat build_captnchat_client
 serve: dist ./start_webservice.sh
 	./start_webservice.sh
     
-mypy: captnchat
-	mypy captnchat
+mypy: fastkafkachat
+	mypy fastkafkachat
 
 .install_git_secrets_hooks:
 	git secrets --install -f
@@ -53,11 +53,11 @@ detect_secrets: .install_pre_commit_hooks
     
 sast: .sast_bandit .sast_semgrep
 
-.sast_bandit: captnchat
-	bandit -r captnchat
+.sast_bandit: fastkafkachat
+	bandit -r fastkafkachat
 	touch .sast_bandit
 
-.sast_semgrep: captnchat
+.sast_semgrep: fastkafkachat
 	semgrep --config auto --error
 	touch .sast_semgrep
 
@@ -77,10 +77,10 @@ prepare: all check test_client
 	nbdev_mkdocs prepare
 
 clean:
-	rm -rf captnchat
-	rm -rf captnchat.egg-info
+	rm -rf fastkafkachat
+	rm -rf fastkafkachat.egg-info
 	rm -rf build
 	rm -rf dist
 	rm -rf mkdocs/docs/
 	rm -rf mkdocs/site/
-	pip uninstall captnchat -y
+	pip uninstall fastkafkachat -y

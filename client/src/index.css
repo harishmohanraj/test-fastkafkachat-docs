@@ -23,12 +23,17 @@
   src: url("./fonts/Rubik-Medium.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "Roboto-Light";
+  src: url("./fonts/Roboto-Light.ttf") format("truetype");
+}
+
 body {
   margin: 0;
   /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif; */
-  font-family: "Rubik-Medium";
+  font-family: "Roboto-Light";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
