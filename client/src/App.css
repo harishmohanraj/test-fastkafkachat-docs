@@ -156,6 +156,7 @@
 
 .message p {
   margin: 20px 0px;
+  line-height: 1.5rem;
 }
 
 .message p:first-child {
