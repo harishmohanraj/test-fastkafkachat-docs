@@ -382,5 +382,10 @@
 }
 pre {
   margin: 20px 0px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+}
+
+.message code {
+  font-family: "RobotoMono-Regular", source-code-pro, Menlo, Monaco, Consolas,
+    "Courier New", monospace;
 }
