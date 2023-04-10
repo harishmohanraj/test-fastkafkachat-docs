@@ -1,3 +1,7 @@
+import ReactMarkdown from 'react-markdown'
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { githubGist } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
 import OpenAISVGLogo from './OpenAISVGLogo'
 
 // Primary Chat Window
@@ -30,7 +34,25 @@ const ChatMessage = ({ message }) => {
         {message.role === "assistant" ? <OpenAISVGLogo /> : <div>You</div>}
       </div>
       <div className="message">
-        {message.content}
+        <ReactMarkdown
+          children={message.content}
+          components={{
+            code({node, inline, className, children, ...props}) {
+              return !inline ? (
+                <SyntaxHighlighter
+                  {...props}
+                  children={String(children).replace(/\n$/, '')}
+                  style={githubGist}
+                  PreTag="div"
+                />
+                ) : (
+                  <code {...props} className={className}>
+                    {children}
+                  </code>
+                )
+            }
+          }}
+        />
       </div>
     </div>
   </div>

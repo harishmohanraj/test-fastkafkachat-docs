@@ -17,17 +17,6 @@ function App() {
     },
   ]);
 
-  // clear chats
-  // function clearChat() {
-  //   setChatLog([
-  //     {
-  //       role: "assistant",
-  //       content:
-  //       "Hi, I'm Fastkafka AI. How can I help you today?"
-  //     },
-  //   ]);
-  // }
-
   async function handleSubmit(e) {
     e.preventDefault();
 
