@@ -18,7 +18,7 @@ const ChatBox = ({chatLog, setChatInput, handleSubmit, chatInput}) =>
           rows="1"
           value={chatInput}
           onChange={(e)=> setChatInput(e.target.value)}
-          placeholder={"Type your question here! (e.g: How do I consume messages from a Kafka topic using FastKafka?)"}
+          placeholder={"Type your question here!"}
           className="chat-input-textarea" ></input>
           <button className="submit" type="submit">Submit</button>
           </form>
