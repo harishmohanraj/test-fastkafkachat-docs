@@ -15,6 +15,62 @@ function App() {
       content:
         "Hi, I'm FastKafka AI. How can I help you today?"
     },
+    {
+      role: "user",
+      content: "How do I consume messages from a Kafka topic using FastKafka?"
+    },
+    {
+      role: "assistant",
+      content:
+      `To consume messages using FastKafka from a Kafka topic, you can follow these steps:
+
+1. Define the structure of the messages using pydantic.
+
+\`\`\`python
+from pydantic import BaseModel, Field
+
+class HelloWorld(BaseModel):
+    msg: str = Field(
+        ...,
+        example="Hello",
+        description="Demo hello world message",
+    )
+\`\`\`
+
+2. Create a FastKafka app instance, specifying the Kafka bootstrap server information.
+
+\`\`\`python
+from fastkafka import FastKafka
+
+kafka_brokers = {
+    "demo_broker": {
+        "url": "<url_of_your_kafka_bootstrap_server>",
+        "description": "local demo kafka broker",
+        "port": "<port_of_your_kafka_bootstrap_server>",
+    }
+}
+
+app = FastKafka(kafka_brokers=kafka_brokers)
+\`\`\`
+
+3. Define a consumer function and decorate it with \`@consumes\`.
+
+\`\`\`python
+from fastkafka._components.logger import get_logger
+
+logger = get_logger(__name__)
+
+@app.consumes("hello_world")
+async def on_hello_world(msg: HelloWorld):
+    logger.info(f"Got msg: {msg}")
+\`\`\`
+4. Run the FastKafka app.
+
+\`\`\`
+fastkafka run --num-workers=1 --kafka-broker=demo_broker your_module_name:app
+\`\`\`
+      `
+    },
   ]);
 
   async function handleSubmit(e) {
@@ -51,6 +107,7 @@ function App() {
         }),
       });
       const data = await response.json();
+      // console.log(data)
       setChatLog([
         ...chatLogNew,
         { role: "assistant", content: `${data}`},
