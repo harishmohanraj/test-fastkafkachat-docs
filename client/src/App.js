@@ -103,7 +103,7 @@ fastkafka run --num-workers=1 --kafka-broker=demo_broker your_module_name:app
         },
         body: JSON.stringify({
           // message_history: serverChatLog,
-          user_query: serverChatLog.at(-1)["content"]
+          query_str: serverChatLog.at(-1)["content"]
         }),
       });
       const data = await response.json();
