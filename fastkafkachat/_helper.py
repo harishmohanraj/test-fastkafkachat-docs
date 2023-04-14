@@ -53,8 +53,12 @@ def get_all_links_from_website(start_url: str, visited: Optional[set] = None) ->
     return visited
 
 # %% ../nbs/Helper.ipynb 5
-def get_service_context():
-    # LLM Predictor (gpt-3.5-turbo) + service context
+def get_service_context() -> ServiceContext:
+    """Return a service context object initialized with an LLM predictor based on the gpt-3.5-turbo model
+    
+    Returns:
+        A ServiceContext object with an LLMPredictor and a chunk size limit.
+    """
     llm_predictor = LLMPredictor(
         llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
     )
@@ -65,13 +69,24 @@ def get_service_context():
     return service_context
 
 # %% ../nbs/Helper.ipynb 7
-def write_compressed_json(json_string, file_path):
+def write_compressed_json(json_string: str, file_path: str) -> None:
+    """Compresses a JSON string and writes it to disk at the specified file path with a .gz extension.
+    
+    Args:
+        json_string: The JSON string to compress and write to disk.
+        file_path: The path to write the compressed JSON file to, without the .gz extension.
+    """
     with gzip.open(file_path + '.gz', 'wb') as f_out:
         json_bytes = json_string.encode('utf-8')
         f_out.write(json_bytes)
         
         
-def load_compressed_json(gziped_json_file_path):
+def load_compressed_json(gziped_json_file_path: str) -> str:
+    """Load a compressed JSON file from disk and returns its contents as a string.
+    
+    Args:
+        gziped_json_file_path: The path to the compressed JSON file to read.
+    """
     with gzip.open(gziped_json_file_path, 'rb') as f:
         json_bytes = f.read()
         json_str = json_bytes.decode('utf-8')
