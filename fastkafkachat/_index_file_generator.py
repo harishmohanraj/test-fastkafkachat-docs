@@ -25,6 +25,8 @@ def _index_website_data(
     """
     urls = list(get_all_links_from_website(start_url))
     
+    typer.echo("\nIndexing the contents from the following URL's: \n")
+    typer.echo("\n".join(sorted(urls)))
     BeautifulSoupWebReader = download_loader("BeautifulSoupWebReader")
     loader = BeautifulSoupWebReader()
     documents = loader.load_data(urls=urls)
@@ -34,6 +36,7 @@ def _index_website_data(
         documents, service_context=service_context
     )
     write_compressed_json(index.save_to_string(), f"{data_dir}/website_index.json")
+    typer.echo("\nIndexing successfully completed.")
 
 # %% ../nbs/CLI_Index_File_Generator.ipynb 6
 _app = typer.Typer()
