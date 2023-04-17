@@ -2,8 +2,7 @@
 
 # %% auto 0
 __all__ = ['DEFAULT_TEXT_QA_PROMPT_TMPL', 'TEXT_QA_TEMPLATE', 'CHAT_REFINE_PROMPT_TMPL_MSGS', 'CHAT_REFINE_PROMPT_LC',
-           'CHAT_REFINE_PROMPT', 'REFINE_TEMPLATE', 'router', 'load_document_from_directory', 'GenerateChatRequest',
-           'generate_chat_response']
+           'CHAT_REFINE_PROMPT', 'REFINE_TEMPLATE', 'router', 'GenerateChatRequest', 'generate_chat_response']
 
 # %% ../nbs/Chat_Generator.ipynb 1
 from pathlib import Path
@@ -12,21 +11,17 @@ from typing import *
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from langchain.chat_models import ChatOpenAI
+
 from langchain.prompts.chat import (
     AIMessagePromptTemplate,
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
 )
-from llama_index import (
-    GPTSimpleVectorIndex,
-    SimpleDirectoryReader,
-    LLMPredictor,
-    ServiceContext,
-)
-from llama_index.readers.schema.base import Document
+from llama_index import GPTSimpleVectorIndex
 from llama_index.prompts.chat_prompts import CHAT_REFINE_PROMPT
 from llama_index.prompts.prompts import QuestionAnswerPrompt, RefinePrompt
+from llama_index.response.schema import Response, StreamingResponse
+from ._helper import get_service_context, load_compressed_json
 
 # %% ../nbs/Chat_Generator.ipynb 3
 DEFAULT_TEXT_QA_PROMPT_TMPL = (
@@ -63,23 +58,11 @@ REFINE_TEMPLATE = RefinePrompt(
 )
 
 # %% ../nbs/Chat_Generator.ipynb 5
-def load_document_from_directory(directory_path: str) -> List[Document]:
-    documents = SimpleDirectoryReader(directory_path).load_data()
-    return documents
-
-# %% ../nbs/Chat_Generator.ipynb 7
-def _get_response_from_model(query_str: str, root_path: str = ".") -> str:
-    # LLM Predictor (gpt-3.5-turbo) + service context
-    llm_predictor = LLMPredictor(
-        llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
-    )
-    service_context = ServiceContext.from_defaults(
-        llm_predictor=llm_predictor, chunk_size_limit=512
-    )
-    documents = load_document_from_directory(f"{root_path}/data/")
-    index = GPTSimpleVectorIndex.from_documents(
-        documents, service_context=service_context
-    )
+def _get_response_from_model(query_str: str, data_dir: str = "./data") -> Union[Response, StreamingResponse]:
+    service_context = get_service_context()
+    index_json_string = load_compressed_json(f"{data_dir}/website_index.json.gz")
+    index = GPTSimpleVectorIndex.load_from_string(index_json_string, service_context=service_context)
+    
     response = index.query(
         query_str=query_str,
         service_context=service_context,
@@ -90,18 +73,18 @@ def _get_response_from_model(query_str: str, root_path: str = ".") -> str:
     )
     return response
 
-# %% ../nbs/Chat_Generator.ipynb 9
+# %% ../nbs/Chat_Generator.ipynb 7
 router = APIRouter()
 
 
-# %% ../nbs/Chat_Generator.ipynb 10
+# %% ../nbs/Chat_Generator.ipynb 8
 class GenerateChatRequest(BaseModel):
     query_str: str
 
-# %% ../nbs/Chat_Generator.ipynb 11
+# %% ../nbs/Chat_Generator.ipynb 9
 @router.post("/")
 def generate_chat_response(
     generate_chat_response_request: GenerateChatRequest,
 ) -> str:
     model_response = _get_response_from_model(generate_chat_response_request.query_str)
-    return model_response.response
+    return model_response.response #type: ignore
